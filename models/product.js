@@ -4,6 +4,9 @@ const Product = mongoose.model('Product',{
     title: {
         type: String
     },
+    author: {
+        type: String
+    },
     description:{
         type: String
     },

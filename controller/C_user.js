@@ -6,22 +6,32 @@ const jwt = require('jsonwebtoken');
 
 
 
-router.post('/register', async (req,res)=>{
-    data = req.body;
-    usr = new User(data);
-    salt = bcrypt.genSalt(10);
-    cryptedpass = await bcrypt.hashSync(data.password , salt);
-    usr.password = cryptedpass;
-    usr.save()
-        .then(
-            (saveduser)=>{
-            res.status(200).send(saveduser);
-            }
-        )
-        .catch((err)=>{
-            res.status(400).send(err);
-        })
-})
+router.post('/register', async (req, res) => {
+    const data = req.body;
+    
+    try {
+        // Ensure that data.password exists
+        if (!data.password) {
+            return res.status(400).send({ error: 'Password is required' });
+        }
+
+        // Generate salt and hash the password
+        const salt = await bcrypt.genSalt(10);  // Await the salt generation
+        const cryptedpass = await bcrypt.hash(data.password, salt);  // Await the password hashing
+
+        const usr = new User({
+            ...data,
+            password: cryptedpass
+        });
+
+        // Save the user and send a response
+        const savedUser = await usr.save();
+        res.status(200).send(savedUser);
+    } catch (error) {
+        console.error('Error registering user:', error);
+        res.status(500).send({ error: 'An error occurred during registration' });
+    }
+});
 
 
 router.post('/login', async (req,res)=>{

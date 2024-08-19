@@ -4,11 +4,9 @@ const User = mongoose.model('User',{
     name: {
         type: String
     },
-    lastname:{
-        type: String
-    },
-    age: {
-        type: Number
+    superuser:{
+        type: Boolean,
+        default: false
     },
     email: {
         type: String
