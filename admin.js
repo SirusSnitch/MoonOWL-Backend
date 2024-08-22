@@ -4,6 +4,7 @@ const AdminBroMongoose = require('admin-bro-mongoose')
 const AdminBroUpload = require('@admin-bro/upload');
 const path = require('path');
 const User = require('./models/user')
+const Order = require('./models/order');
 const Product = require('./models/product')
 AdminBro.registerAdapter(AdminBroMongoose)
 const bcrypt = require('bcrypt');
@@ -24,7 +25,8 @@ const adminBro = new AdminBro({
         actions: {
           delete: {
             isAccessible: true, // Ensure the delete action is accessible
-            isVisible: true, // Ensure the delete button is visible
+            isVisible: true,
+            delete: true, // Ensure the delete button is visible
           },
           new: {
             before: async (request) => {
@@ -52,7 +54,7 @@ const adminBro = new AdminBro({
         options: {
           properties: {
             image: {
-              isVisible: { list: true, filter: false, show: true, edit: true },
+              isVisible: { list: true, filter: false, show: true, edit: true, delete: true },
               components: {
                 edit: AdminBroUpload.Edit,
                 list: AdminBroUpload.List,
@@ -89,6 +91,25 @@ const adminBro = new AdminBro({
             },
           }),
         ],
+      },
+      {
+        resource: Order, // Add the Order resource
+        options: {
+          properties: {
+            'items._id': {
+              isVisible: { list: true, show: true, edit: false }, // Make the _id field visible
+            },
+            'items.quantity': {
+              isVisible: { list: true, show: true, edit: false }, // Also show quantity
+            },
+            'items.price': {
+              isVisible: { list: true, show: true, edit: false }, // Also show price
+            },
+            userId: { isVisible: { list: true, show: true, edit: false } },
+            totalPrice: { isVisible: { list: true, show: true, edit: false } },
+            createdAt: { isVisible: { list: true, show: true, edit: false } },
+          },
+        },
       },
 
 

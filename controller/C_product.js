@@ -56,7 +56,7 @@ router.get('/getall',(req,res)=>{
 router.get('/getbyid/:id',(req , res)=>{
 
     id = req.params.id;
-    Product.findById({ _id: id})
+    Product.findById({_id: id})
         .then(
             (product)=>{
                 res.status(200).send(product)
