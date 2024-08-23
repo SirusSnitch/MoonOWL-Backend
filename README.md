@@ -1,4 +1,4 @@
-![Logo](./src/assets/logo.png)
+![Logo](./Assets/logo.png)
 
 # MoonOWL Bookstore Backend
 
